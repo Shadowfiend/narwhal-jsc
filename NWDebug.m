@@ -4,6 +4,7 @@
 */
 
 #import "NWDebug.h"
+#import "IGIsolatedCookieWebView.h"
 
 #import <objc/runtime.h>
 
@@ -13,6 +14,8 @@ static int global_argc;
 static char **global_argv;
 static char **global_envp;
 static WebView *global_webView;
+static WebView *global_testView1;
+static WebView *global_testView2;
 
 extern int narwhal(JSGlobalContextRef _context, JSValueRef *_exception, int argc, char *argv[], char *envp[], int runShell);
 
@@ -61,6 +64,9 @@ extern int narwhal(JSGlobalContextRef _context, JSValueRef *_exception, int argc
     [win setValue:inspector forKey:@"_inspector"];
     
     JSGlobalContextRef context = [[webView mainFrame] globalContext];
+    [[[webView mainFrame] windowObject] setValue:[[global_testView1 mainFrame] windowObject] forKey:@"_browser1"];
+    [[[webView mainFrame] windowObject] setValue:[[global_testView2 mainFrame] windowObject] forKey:@"_browser2"];
+
     JSValueRef exception = NULL;
     narwhal(context, &exception, global_argc, global_argv, global_envp, 0);
     if (exception) {
@@ -169,6 +175,8 @@ WebView * NW_init(int argc, char *argv[], char *envp[])
     global_argv = argv;
     global_envp = envp;
     global_webView = [[WebView alloc] init];
+    global_testView1 = [[IGIsolatedCookieWebView alloc] init];
+    global_testView2 = [[IGIsolatedCookieWebView alloc] init];
     
     return global_webView;
 }

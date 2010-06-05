@@ -1,6 +1,6 @@
 CPP       =g++
 CC        =gcc
-CPPFLAGS  = -0s -force_cpusubtype_ALL -mmacosx-version-min=10.4 -arch i386 -arch ppc
+CPPFLAGS  = -0s -force_cpusubtype_ALL -mmacosx-version-min=10.5 -arch i386
 #CPPFLAGS += -g -O0
 #CPPFLAGS += -DDEBUG_ON
 #CPPFLAGS += -save-temps
@@ -57,9 +57,9 @@ bin/narwhal-webkit: $(SOURCE) lib/libnarwhal.dylib
 		-framework Foundation -framework WebKit
 	install_name_tool -change "$(ABSOLUTE_LIBNARWHAL)" "$(RELATIVE_LIBNARWHAL)" "$@"
 
-bin/narwhal-webkit-debug: $(SOURCE) NWDebug.m lib/libnarwhal.dylib
+bin/narwhal-webkit-debug: $(SOURCE) NWDebug.m IGIsolatedCookieWebView.m lib/libnarwhal.dylib
 	mkdir -p `dirname $@`
-	$(CC) -o $@ -DWEBKIT_DEBUG -x objective-c $(SOURCE) NWDebug.m $(CPPFLAGS) $(INCLUDES) $(LIBS) \
+	$(CC) -o $@ -DWEBKIT_DEBUG -x objective-c $(SOURCE) NWDebug.m IGIsolatedCookieWebView.m $(CPPFLAGS) $(INCLUDES) $(LIBS) \
 		-framework Foundation -framework WebKit \
 		-framework AppKit -sectcreate __TEXT __info_plist Info.plist
 	install_name_tool -change "$(ABSOLUTE_LIBNARWHAL)" "$(RELATIVE_LIBNARWHAL)" "$@"
