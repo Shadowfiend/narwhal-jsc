@@ -57,9 +57,9 @@ bin/narwhal-webkit: $(SOURCE) lib/libnarwhal.dylib
 		-framework Foundation -framework WebKit
 	install_name_tool -change "$(ABSOLUTE_LIBNARWHAL)" "$(RELATIVE_LIBNARWHAL)" "$@"
 
-bin/narwhal-webkit-debug: $(SOURCE) NWDebug.m IGIsolatedCookieWebView.m lib/libnarwhal.dylib
+bin/narwhal-webkit-debug: $(SOURCE) NWDebug.m IGIsolatedCookieWebView.m OSBrowserManager.m lib/libnarwhal.dylib
 	mkdir -p `dirname $@`
-	$(CC) -o $@ -DWEBKIT_DEBUG -x objective-c $(SOURCE) NWDebug.m IGIsolatedCookieWebView.m $(CPPFLAGS) $(INCLUDES) $(LIBS) \
+	$(CC) -o $@ -DWEBKIT_DEBUG -x objective-c $(SOURCE) NWDebug.m IGIsolatedCookieWebView.m OSBrowserManager.m $(CPPFLAGS) $(INCLUDES) $(LIBS) \
 		-framework Foundation -framework WebKit \
 		-framework AppKit -sectcreate __TEXT __info_plist Info.plist
 	install_name_tool -change "$(ABSOLUTE_LIBNARWHAL)" "$(RELATIVE_LIBNARWHAL)" "$@"
