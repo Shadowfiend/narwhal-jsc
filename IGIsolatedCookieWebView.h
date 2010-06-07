@@ -37,6 +37,12 @@
 
 }
 
++ (BOOL)isSelectorExcludedFromWebScript:(SEL)aSelector;
++ (NSString *)webScriptNameForSelector:(SEL)aSelector;
+
 - (void)injectCookie:(NSHTTPCookie *)cookie;
+- (void)clearCookies;
+- (WebScriptObject *)windowScriptObject;
+- (NSWindow *)window;
 
 @end

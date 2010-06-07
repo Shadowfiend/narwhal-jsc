@@ -52,6 +52,7 @@ didReceiveResponse:(NSURLResponse *)response
 
 - (void)setCookie:(NSHTTPCookie *)cookie;
 - (NSArray *)getCookieArrayForRequest:(NSURLRequest *)request;
+- (void)clearCookies;
 
 @end
 
@@ -60,6 +61,21 @@ didReceiveResponse:(NSURLResponse *)response
 #pragma mark main class implementation
 
 @implementation IGIsolatedCookieWebView
+
++ (BOOL)isSelectorExcludedFromWebScript:(SEL)aSelector
+{
+  NSLog(@"Checking selector %@.", NSStringFromSelector(aSelector));
+  return aSelector == @selector(window);
+}
+
++ (NSString *)webScriptNameForSelector:(SEL)aSelector
+{
+  NSLog(@"Converting selector %@.", NSStringFromSelector(aSelector));
+  if (aSelector == @selector(windowScriptObject))
+    return @"window";
+  else
+    return nil;
+}
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
@@ -80,6 +96,19 @@ didReceiveResponse:(NSURLResponse *)response
 - (void)injectCookie:(NSHTTPCookie *)cookie
 {
 	[(IGIsolatedCookieWebViewResourceLoadDelegate *)[self resourceLoadDelegate] setCookie:cookie];
+}
+
+- (void)clearCookies
+{
+  [[self resourceLoadDelegate] clearCookies];
+}
+
+- (WebScriptObject *)windowScriptObject {
+  return [super windowScriptObject];
+}
+
+- (NSWindow *)window {
+  return [super window];
 }
 
 @end
@@ -234,6 +263,11 @@ didReceiveResponse:(NSURLResponse *)response
 		}
 	}
 	return [NSArray arrayWithArray:cookiesToSend];
+}
+
+- (void)clearCookies
+{
+  [cookieStore removeAllObjects];
 }
 
 @end
