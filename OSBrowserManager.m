@@ -68,7 +68,7 @@
 
 - (WebScriptObject *)createBrowserNamed:(NSString *)name
 {
-  WebScriptObject *browser = nil;
+  IGIsolatedCookieWebView *browser = nil;
   @try {
     browser = [browsers valueForKey:name];
   } @catch (NSException *exception) {
@@ -78,15 +78,14 @@
   NSUInteger length = [webViewList count];
 
   if (! browser) {
-    IGIsolatedCookieWebView *webView = [[IGIsolatedCookieWebView alloc] init];
-    browser = [[webView mainFrame] windowObject];
+    browser = [[IGIsolatedCookieWebView alloc] init];
 
     [browsers setValue:browser forKey:name];
     [browsers setWebScriptValueAtIndex:length value:browser];
-    [webViewList addObject:webView];
+    [webViewList addObject:browser];
   }
 
-  return browser;
+  return [[browser mainFrame] windowObject];
 }
 
 @end
