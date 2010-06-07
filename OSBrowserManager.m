@@ -85,7 +85,7 @@
     [webViewList addObject:browser];
   }
 
-  return [[browser mainFrame] windowObject];
+  return browser;
 }
 
 @end
